@@ -20,12 +20,12 @@ describe("Chat Server", function() {
   it('should broadcast new user once they connect', function(done){
     var client = io.connect(socketURL, options);
 
-    client.on('connect', function(data){
+    client.on('connect', function(){
       client.emit('connection name', chatUser1);
     });
 
     client.on('new user', function(usersName) {
-      usersName.should.be.type('string');
+      usersName.should.be.a('string');
       usersName.should.equal(chatUser1.name + " has joined.");
       client.disconnect();
       done();
