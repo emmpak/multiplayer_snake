@@ -9,29 +9,18 @@
     <h1 style='position:absolute' id="move">MOVE</h1>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="move.js"></script>
     <script>
-      $(function () {
-        $(document).on('keydown', function(key){
-            move(key.which);
-          });
-
-        function move(key) {
-          switch(key) {
-          case 40:
-            $("#move").animate({top: "+=5"}, "fast");
-            break;
-          case 37:
-            $("#move").animate({left: "-=5"}, "fast");
-            break;
-          case 39:
-            $("#move").animate({left: "+=5"}, "fast");
-            break;
-          case 38:
-            $("#move").animate({top: "-=5"}, "fast");
-            break;
-          }
-        }
-      });
+        var socket = io();
+        $('form').submit(function(){
+          socket.emit('message', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
     </script>
   </body>
 </html>
