@@ -17,16 +17,16 @@ app.get('/', function(req, res){
 
 io.on('connect', function(socket){
   var position = {x: 300, y:300};
-  var key = 37;
+  var key = 1;
   setInterval(function(){
-    io.emit('move', square.calculatePosition(position,key));
+    io.emit('update position', square.calculatePosition(position,key));
   }, 1000);
-    
+
 
   console.log('new connection ' + socket.id)
 
   socket.on('keypress', function(key){
-    io.emit('move', square.calculatePosition(position,key));
+    io.emit('update position', square.calculatePosition(position,key));
   });
 });
 
