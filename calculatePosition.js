@@ -1,17 +1,17 @@
 module.exports = {
   calculatePosition: function(position, key) {
-    console.log(key);
     switch(key) {
     case 40:
-      position['y'] += 5;
+      position.y += 5;
+      return position;
     case 37:
-      position['x'] -= 5;
+      position["x"] -= 5;
+      return position;
     case 39:
-      position['x'] += 5;
+      position["x"] += 5;
+      return position;
     case 38:
-      position['y'] -= 5;
-    default:
-      console.log(position);
+      position["y"] -= 5;
       return position;
     }
   }

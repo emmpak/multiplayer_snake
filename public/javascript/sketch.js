@@ -1,3 +1,4 @@
+var socket = io();
 var square;
 
 function setup() {
