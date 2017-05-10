@@ -16,16 +16,19 @@ app.get('/', function(req, res){
 });
 
 io.on('connect', function(socket){
-  var position = {x: 300, y:300};
-  var key = 1;
+  var position = {x: 490, y:490};
+  var globalKey = 1;
   setInterval(function(){
-    io.emit('update position', square.calculatePosition(position,key));
-  }, 1000);
+    console.log(globalKey);
+    io.emit('update position', square.calculatePosition(position,globalKey));
+  }, 500);
 
 
   console.log('new connection ' + socket.id)
 
   socket.on('keypress', function(key){
+    console.log("this one" + key);
+    globalKey = key;
     io.emit('update position', square.calculatePosition(position,key));
   });
 });
