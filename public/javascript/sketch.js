@@ -15,11 +15,7 @@ function updatePosition(x, y) {
   square.update(x, y);
 }
 
-
 function Square() {
-  // this.x = 490;
-  // this.y = 490;
-
   this.update = function(x, y) {
     this.x = x;
     this.y = y;
@@ -29,7 +25,6 @@ function Square() {
     fill(255);
     rect(this.x,this.y,20,20);
   };
-
 }
 
 socket.on('update position', function(coordinates){

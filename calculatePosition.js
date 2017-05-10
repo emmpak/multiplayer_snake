@@ -5,13 +5,15 @@ module.exports = {
       position.y += 20;
       return position;
     case 37:
-      position["x"] -= 20;
+      position.x -= 20;
       return position;
     case 39:
-      position["x"] += 20;
+      position.x += 20;
       return position;
     case 38:
-      position["y"] -= 20;
+      position.y -= 20;
+      return position;
+    default:
       return position;
     }
   }
