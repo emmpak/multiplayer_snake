@@ -16,7 +16,6 @@
           return false;
         });
         socket.on('move', function(position) {
-          console.log(position);
           $('#move').css({top: position.top, left: position.left})
         });
         socket.on('message', function(msg){

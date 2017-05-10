@@ -20,7 +20,6 @@ io.on('connect', function(socket){
     io.emit('chat message', msg);
   });
   socket.on('move', function(position){
-    console.log(position);
     io.emit('move', position);
   });
 });
