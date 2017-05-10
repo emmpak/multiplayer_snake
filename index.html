@@ -15,9 +15,9 @@
           $('#m').val('');
           return false;
         });
-      
+
         socket.on('move', function(position) {
-          $('#move').css({top: position.top, left: position.left})
+          console.log(position);
         });
 
         socket.on('message', function(msg){

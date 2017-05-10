@@ -10,7 +10,8 @@ module.exports = {
     case 38:
       position['y'] += 5;
     default:
-      position;
+      console.log(position);
+      return position;
     }
   }
 }
