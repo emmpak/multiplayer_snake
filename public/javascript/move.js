@@ -1,4 +1,4 @@
 function keyPressed() {
-  socket.emit('move', keyCode);
+  socket.emit('keypress', keyCode);
   console.log(keyCode);
 }

@@ -10,7 +10,7 @@ function draw() {
   square.show();
 }
 
-function getCoordinates(x, y) {
+function updatePosition(x, y) {
   square.update(x, y);
 }
 
@@ -31,6 +31,6 @@ function Square() {
 
 }
 
-// socket.on('update position', function(coordinates){
-// updateSquare(50, -20)
-// });
+socket.on('update position', function(coordinates){
+  updatePosition(coordinates.x, coordinates.y);
+});
