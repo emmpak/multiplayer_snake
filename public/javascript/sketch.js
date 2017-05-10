@@ -17,8 +17,8 @@ function updatePosition(x, y) {
 
 
 function Square() {
-  this.x = 490;
-  this.y = 490;
+  // this.x = 490;
+  // this.y = 490;
 
   this.update = function(x, y) {
     this.x = x;
