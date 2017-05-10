@@ -15,6 +15,10 @@
           $('#m').val('');
           return false;
         });
+        socket.on('move', function(position) {
+          console.log(position);
+          $('#move').css({top: position.top, left: position.left})
+        });
         socket.on('message', function(msg){
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
