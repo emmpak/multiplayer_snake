@@ -9,6 +9,9 @@
     "request": "^2.81.0",
     "socket.io": "^1.7.3"
   },
+  "engines": {
+  "node": "7.9.0"
+  },
   "scripts": {
     "start": "node index.js",
     "test":"mocha"
