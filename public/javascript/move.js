@@ -1,7 +1,7 @@
 $(function () {
   $(document).on('keydown', function(key){
-      var position = move(key.which);
-      socket.emit('move', position);
+      // var position = move(key.which);
+      socket.emit('move', key.which);
     });
 
   function move(key) {
