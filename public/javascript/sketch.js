@@ -36,17 +36,6 @@ socket.on('update position', function(coordinates){
     squares.push(new Square());
   }
   for(var i=0; i<coordinates.length; i++){
-    updatePosition(coordinates.id, coordinates.position.x, coordinates.position.y);
+    updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
   }
 });
-
-// function testingSocketNewSquare() {
-//   squares.push(new Square());
-//   console.log(squares);
-// }
-//
-// function testingSocketUpdatePosition(coordinates) {
-//   for(var i=0; i<coordinates.length; i++){
-//     updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
-//   }
-// }
