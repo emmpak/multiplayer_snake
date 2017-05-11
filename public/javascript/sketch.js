@@ -32,7 +32,7 @@ function Square() {
 }
 
 socket.on('update position', function(coordinates){
-  while(coordinates.length > squares.length) {
+  while(coordinates.length >= squares.length) {
     squares.push(new Square());
   }
   for(var i=0; i<coordinates.length; i++){
@@ -41,7 +41,7 @@ socket.on('update position', function(coordinates){
 });
 
 socket.on('disconnect', function(id){
-  console.log(scores);
+  console.log(squares);
   squares = squares.filter(function(square) {square.id !== id});
-  console.log(scores);
+  console.log(squares);
 });
