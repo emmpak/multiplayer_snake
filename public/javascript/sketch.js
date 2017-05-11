@@ -32,10 +32,16 @@ function Square() {
 }
 
 socket.on('update position', function(coordinates){
-  while(coordinates.length > squares.length) {
+  while(coordinates.length >= squares.length) {
     squares.push(new Square());
   }
   for(var i=0; i<coordinates.length; i++){
     updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
   }
+});
+
+socket.on('disconnect', function(id){
+  console.log(squares);
+  squares = squares.filter(function(square) {square.id !== id});
+  console.log(squares);
 });
