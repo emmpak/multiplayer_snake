@@ -1,18 +1,19 @@
 var socket = io();
-var square;
+var squares = [];
 
 function setup() {
   createCanvas(1000, 1000);
-  square = new Square();
 }
 
 function draw() {
   background(0, 0, 255);
-  square.show();
+  for(var i=0; i<squares.length; i++){
+    squares[i].show();
+  }
 }
 
-function updatePosition(x, y) {
-  square.update(x, y);
+function updatePosition(i, x, y) {
+  squares[i].update(x,y)
 }
 
 function Square() {
@@ -27,6 +28,23 @@ function Square() {
   };
 }
 
-socket.on('update position', function(coordinates){
-  updatePosition(coordinates.x, coordinates.y);
-});
+// socket.on('update position', function(coordinates){
+//   for(var i=0; i<coordinates.length; i++){
+//     updatePosition(coordinates.id, coordinates.position.x, coordinates.position.y);
+//   }
+// });
+//
+// socket.on('new player', function() {
+//   squares << new Square();
+// });
+
+function testingSocketNewSquare() {
+  squares.push(new Square());
+  console.log(squares);
+}
+
+function testingSocketUpdatePosition(coordinates) {
+  for(var i=0; i<coordinates.length; i++){
+    updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
+  }
+}
