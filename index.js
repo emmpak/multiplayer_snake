@@ -25,9 +25,12 @@ io.on('connect', function(socket){
     key: 0
   };
 
-  setInterval(function(){
-    io.emit('update position', updatePositions());
-  }, 5000);
+  if(getAllPlayers().length === 1){
+    setInterval(function(){
+      io.emit('update position', updatePositions());
+      console.log(getAllPlayers());
+    }, 700);
+  }
 
   function getAllPlayers() {
     var players = [];
@@ -59,8 +62,8 @@ io.on('connect', function(socket){
   });
 
   socket.on('disconnect', function() {
-    console.log(socket);
-    // io.emit('disconnect',socket.player.id);
+    console.log(socket.player.id);
+    io.emit('disconnect',socket.player.id);
   });
 });
 

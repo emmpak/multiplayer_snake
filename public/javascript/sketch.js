@@ -41,5 +41,7 @@ socket.on('update position', function(coordinates){
 });
 
 socket.on('disconnect', function(id){
-  squares.filter(function(square) {square.id !== id});
+  console.log(scores);
+  squares = squares.filter(function(square) {square.id !== id});
+  console.log(scores);
 });
