@@ -57,7 +57,13 @@ io.on('connect', function(socket){
     socket.player.key = key;
     io.emit('update position', square.calculatePosition(socket.player.position, key));
   });
+
+  socket.on('disconnect', function() {
+    console.log(socket);
+    // io.emit('disconnect',socket.player.id);
+  });
 });
+
 
 http.listen(port, function(){
   console.log('listening on *:' + port);

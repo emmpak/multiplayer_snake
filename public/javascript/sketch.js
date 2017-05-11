@@ -39,3 +39,7 @@ socket.on('update position', function(coordinates){
     updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
   }
 });
+
+socket.on('disconnect', function(id){
+  squares.filter(function(square) {square.id !== id});
+});
