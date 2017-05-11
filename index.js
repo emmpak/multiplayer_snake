@@ -19,8 +19,8 @@ io.on('connect', function(socket){
   socket.player = {
     id: http.lastPlayerID++,
     position: {
-      x: randomInt(100,400),
-      y: randomInt(100,400)
+      x: randomInt(5,45)*20,
+      y: randomInt(5,45)*20,
     },
     key: 0
   };
@@ -29,7 +29,7 @@ io.on('connect', function(socket){
     setInterval(function(){
       io.emit('update position', updatePositions());
       console.log(getAllPlayers());
-    }, 700);
+    }, 100);
   }
 
   function getAllPlayers() {
@@ -43,17 +43,25 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
-      player.position = square.calculatePosition(player.position,player.key);
-
+      if(checkBoundary(player.position) != true) {
+        player.position = square.calculatePosition(player.position,player.key);
+      } else {
+        player.position.x = 480;
+        player.position.y = 480;
+      }
     });
     return getAllPlayers();
   }
 
+  function checkBoundary(pos) {
+    if(pos.x <= 0 || pos.y <= 0 || pos.x >= 980 || pos.y >= 980) {
+      return true;
+    }
+  }
+
   function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
-}
-
-
+  }
 
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
