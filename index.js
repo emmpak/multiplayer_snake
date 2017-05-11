@@ -9,8 +9,6 @@ var port = process.env.PORT || 3000;
 
 var square = require('./calculatePosition')
 http.lastPlayerID = 0;
-// var position = {x:490, y:490};
-// var globalKey = 1;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -26,12 +24,10 @@ io.on('connect', function(socket){
     },
     key: 0
   };
-  // setInterval(function(){
-  //   io.emit('all players', getAllPlayers());
-  // },500);
+
   setInterval(function(){
-    // console.log("globalKey: " + globalKey);
-    io.emit('update position', square.calculatePosition(socket.player.position,socket.player.key));
+    io.emit('update position', updatePositions());
+    console.log(getAllPlayers());
   }, 5000);
 
   function getAllPlayers() {
@@ -41,6 +37,12 @@ io.on('connect', function(socket){
       if(player) players.push(player);
     });
     return players;
+  }
+
+  function updatePositions() {
+    return getAllPlayers().forEach(function(player){
+      player.position = square.calculatePosition(player.position,player.key)
+    });
   }
 
   function randomInt (low, high) {
