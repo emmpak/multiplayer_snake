@@ -1,5 +1,5 @@
 var socket = io();
-var square;
+var squares;
 
 function setup() {
   createCanvas(1000, 1000);
