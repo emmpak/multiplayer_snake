@@ -1,32 +1,41 @@
 var socket = io();
-var squares;
+
+var squares = [];
+var colours = ['white', 'red', 'green', 'pink'];
 
 function setup() {
   createCanvas(1000, 1000);
-  square = new Square();
 }
 
 function draw() {
-  background(0, 0, 255);
-  square.show();
+  background('#34495e');
+  for(var i=0; i<squares.length; i++){
+    squares[i].show(i);
+  }
 }
 
-function updatePosition(x, y) {
-  square.update(x, y);
+function updatePosition(i, x, y) {
+  squares[i].update(x,y);
 }
 
 function Square() {
+
   this.update = function(x, y) {
     this.x = x;
     this.y = y;
   };
 
-  this.show = function() {
-    fill(255);
+  this.show = function(id) {
+    fill(colours[id]);
     rect(this.x,this.y,20,20);
   };
 }
 
 socket.on('update position', function(coordinates){
-  updatePosition(coordinates.x, coordinates.y);
+  while(coordinates.length > squares.length) {
+    squares.push(new Square());
+  }
+  for(var i=0; i<coordinates.length; i++){
+    updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
+  }
 });

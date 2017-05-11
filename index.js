@@ -7,7 +7,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
-var square = require('./calculatePosition')
+var square = require('./calculatePosition');
 http.lastPlayerID = 0;
 
 app.get('/', function(req, res){
@@ -15,7 +15,7 @@ app.get('/', function(req, res){
 });
 
 io.on('connect', function(socket){
-  console.log(socket.id);
+  console.log('new connection ' + socket.id);
   socket.player = {
     id: http.lastPlayerID++,
     position: {
@@ -27,7 +27,6 @@ io.on('connect', function(socket){
 
   setInterval(function(){
     io.emit('update position', updatePositions());
-    console.log(getAllPlayers());
   }, 5000);
 
   function getAllPlayers() {
@@ -40,9 +39,11 @@ io.on('connect', function(socket){
   }
 
   function updatePositions() {
-    return getAllPlayers().forEach(function(player){
-      player.position = square.calculatePosition(player.position,player.key)
+    getAllPlayers().forEach(function(player){
+      player.position = square.calculatePosition(player.position,player.key);
+
     });
+    return getAllPlayers();
   }
 
   function randomInt (low, high) {
@@ -50,12 +51,10 @@ io.on('connect', function(socket){
 }
 
 
-  console.log('new connection ' + socket.id)
 
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
     socket.player.key = key;
-    console.log(socket.player);
     io.emit('update position', square.calculatePosition(socket.player.position, key));
   });
 });
