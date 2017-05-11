@@ -22,7 +22,8 @@ io.on('connect', function(socket){
       x: randomInt(100,400),
       y: randomInt(100,400)
     },
-    key: 0
+    key: 0,
+    positions: []
   };
 
   if(getAllPlayers().length === 1){
@@ -43,8 +44,8 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
-      player.position = square.calculatePosition(player.position,player.key);
-
+      square.calculatePosition(socket.player);
+      console.log(player.positions);
     });
     return getAllPlayers();
   }
@@ -58,7 +59,7 @@ io.on('connect', function(socket){
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
     socket.player.key = key;
-    io.emit('update position', square.calculatePosition(socket.player.position, key));
+    io.emit('update position', square.calculatePosition(socket.player));
   });
 
   socket.on('disconnect', function() {

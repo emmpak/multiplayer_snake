@@ -1,20 +1,21 @@
 module.exports = {
-  calculatePosition: function(position, key) {
-    switch(key) {
+  calculatePosition: function(player) {
+    player.positions.push(JSON.parse(JSON.stringify(player.position)));
+    switch(player.key) {
     case 40:
-      position.y += 20;
-      return position;
+      player.position.y += 20;
+      return player.position;
     case 37:
-      position.x -= 20;
-      return position;
+      player.position.x -= 20;
+      return player.position;
     case 39:
-      position.x += 20;
-      return position;
+      player.position.x += 20;
+      return player.position;
     case 38:
-      position.y -= 20;
-      return position;
+      player.position.y -= 20;
+      return player.position;
     default:
-      return position;
+    return player.position;
     }
   }
 }
