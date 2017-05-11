@@ -1,4 +1,5 @@
 var socket = io();
+
 var squares = [];
 var colours = ['white', 'red', 'green', 'pink'];
 
