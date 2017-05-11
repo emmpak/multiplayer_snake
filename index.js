@@ -17,15 +17,22 @@ app.get('/', function(req, res){
 });
 
 io.on('connect', function(socket){
-  socket.on('new player', function() {
-    socket.player = {
-      id: http.lastPlayerID++,
+  console.log(socket.id);
+  socket.player = {
+    id: http.lastPlayerID++,
+    position: {
       x: randomInt(100,400),
       y: randomInt(100,400)
-    };
-    socket.emit('all players', getAllPlayers());
-    socket.broadcast.emit('new player', socket.player);
-  });
+    },
+    key: 0
+  };
+  // setInterval(function(){
+  //   io.emit('all players', getAllPlayers());
+  // },500);
+  setInterval(function(){
+    // console.log("globalKey: " + globalKey);
+    io.emit('update position', square.calculatePosition(socket.player.position,socket.player.key));
+  }, 5000);
 
   function getAllPlayers() {
     var players = [];
@@ -39,19 +46,15 @@ io.on('connect', function(socket){
   function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
-  //
-  // setInterval(function(){
-  //   console.log("globalKey: " + globalKey);
-  //   io.emit('update position', square.calculatePosition(position,globalKey));
-  // }, 500);
+
 
   console.log('new connection ' + socket.id)
 
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
-    // globalKey = key;
+    socket.player.key = key;
     console.log(socket.player);
-    io.emit('update position', square.calculatePosition(socket.player, key));
+    io.emit('update position', square.calculatePosition(socket.player.position, key));
   });
 });
 
