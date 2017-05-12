@@ -43,18 +43,21 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
-      if(checkBoundary(player.position) != true) {
+      if(player.dead) {
+        console.log(player.id + " is dead!")
+      }
+      else if(checkBoundary(player.position) != true) {
         player.position = square.calculatePosition(player.position,player.key);
       } else {
-        player.position.x = 480;
-        player.position.y = 480;
+        player.dead = true;
+        console.log(player.id);
       }
     });
     return getAllPlayers();
   }
 
   function checkBoundary(pos) {
-    if(pos.x <= 0 || pos.y <= 0 || pos.x >= 980 || pos.y >= 980) {
+    if(pos.x < 0 || pos.y < 0 || pos.x > 980 || pos.y > 980) {
       return true;
     }
   }
@@ -66,7 +69,11 @@ io.on('connect', function(socket){
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
     socket.player.key = key;
-    io.emit('update position', square.calculatePosition(socket.player.position, key));
+    if(socket.player.dead !== true) {
+      io.emit('update position', square.calculatePosition(socket.player.position, key));
+    } else {
+      console.log(socket.player.id + " is dead!");
+    }
   });
 
   socket.on('disconnect', function() {
