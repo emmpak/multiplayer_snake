@@ -14,6 +14,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+var playersDead = 0;
+
 io.on('connect', function(socket){
 
   console.log('new connection ' + socket.id);
@@ -29,7 +31,6 @@ io.on('connect', function(socket){
 
   if(getAllPlayers().length === 1){
     setInterval(function(){
-      console.log(getAllPlayers());
       io.emit('update position', updatePositions());
     }, 100);
   }
@@ -37,7 +38,11 @@ io.on('connect', function(socket){
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
     socket.player.key = key;
-    io.emit('update single position', square.calculatePosition(socket.player));
+    if(socket.player.dead !== true) {
+      io.emit('update single position', square.calculatePosition(socket.player));
+    } else {
+      console.log(socket.player.id + " is dead!");
+    }
   });
 
   socket.on('disconnect', function() {
@@ -56,19 +61,62 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
-      square.calculatePosition(player);
       console.log(player.positions);
+
+      if(player.dead) {
+        console.log(player.id + " is dead!")
+      }
+      else if(checkBoundary(player.positions.slice(-1)[0]) != true) {
+        square.calculatePosition(player);
+      } else {
+        player.dead = true;
+        playersDead += 1;
+        if(playersDead+1 >= getAllPlayers().length) {
+          io.emit('winner', 'We have a WINNER!');
+          setTimeout(function() {
+            io.emit('winner', 'New game starts in: 3');
+            setTimeout(function() {
+              io.emit('winner', 'New game starts in: 2');
+              setTimeout(function() {
+                io.emit('winner', 'New game starts in: 1');
+                setTimeout(function() {
+                  resetAllPlayers();
+                }, 1000);
+              }, 1000);
+            }, 1000);
+          }, 3000);
+        } else {
+        }
+      }
     });
     return getAllPlayers();
   }
 
-  function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
+
+  function resetAllPlayers() {
+    getAllPlayers().forEach(function(player){
+      player.dead = false;
+      var originalPosition = startPoint();
+      player.positions = [originalPosition];
+      player.key = 0;
+      playersDead = 0;
+      io.emit('winner', "");
+    })
+  }
+
+  function checkBoundary(pos) {
+    if(pos[0] < 0 || pos[1] < 0 || pos[0] > 980 || pos[1] > 980) {
+      return true;
+    }
+  }
+
+  function randomInt (low, high, multiple) {
+    return Math.floor(Math.random() * (high - low) + low) * multiple;
   }
 
   function startPoint() {
-    var x = randomInt(100,400);
-    var y = randomInt(100,400);
+    var x = randomInt(5,45,20);
+    var y = randomInt(5,45,20);
     return [x,y];
   }
 });

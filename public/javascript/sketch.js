@@ -1,21 +1,21 @@
 var socket = io();
 
 var snakes = [];
-var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var colours = ['white', 'yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var winningMessage = "";
 
 function setup() {
   createCanvas(1000, 1000);
-  background('#34495e');
 }
 
 function draw() {
+  background('#34495e');
   for(var i=0; i<snakes.length; i++){
     snakes[i].show(i);
-
-    // for(var j=0; j<snakes[i].positions; j++) {
-    //   snakes[i].show(i, j);
-    // }
   }
+  fill(255);
+  textSize(50);
+  text(winningMessage, 275, 500);
 }
 
 function updatePosition(i, positions) {
@@ -32,7 +32,6 @@ function Snake() {
   this.show = function(i) {
     fill(colours[i]);
     this.positions.forEach(function(position) {rect(position[0],position[1],20,20);})
-    // rect(this.positions[j][0],this.positions[j][1],20,20);
   };
 }
 
@@ -53,6 +52,10 @@ socket.on('update position', function(players){
 
 socket.on('update single position', function(player){
     updatePosition(player.id, player.positions);
+});
+
+socket.on('winner', function(message){
+  winningMessage = message;
 });
 
 socket.on('disconnect', function(id){
