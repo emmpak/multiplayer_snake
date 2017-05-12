@@ -1,7 +1,8 @@
 var socket = io();
 
 var squares = [];
-var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var colours = ['white', 'yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var winningMessage = "";
 
 function setup() {
   createCanvas(1000, 1000);
@@ -12,6 +13,9 @@ function draw() {
   for(var i=0; i<squares.length; i++){
     squares[i].show(i);
   }
+  fill(255);
+  textSize(50);
+  text(winningMessage, 275, 500);
 }
 
 function updatePosition(i, x, y) {
@@ -38,6 +42,10 @@ socket.on('update position', function(coordinates){
   for(var i=0; i<coordinates.length; i++){
     updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
   }
+});
+
+socket.on('winner', function(message){
+  winningMessage = message;
 });
 
 socket.on('disconnect', function(id){
