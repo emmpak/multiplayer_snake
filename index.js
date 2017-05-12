@@ -31,7 +31,7 @@ io.on('connect', function(socket){
     setInterval(function(){
       console.log(getAllPlayers());
       io.emit('update position', updatePositions());
-    }, 700);
+    }, 100);
   }
 
   socket.on('keypress', function(key){
@@ -56,7 +56,7 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
-      square.calculatePosition(socket.player);
+      square.calculatePosition(player);
       console.log(player.positions);
     });
     return getAllPlayers();
