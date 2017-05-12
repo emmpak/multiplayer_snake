@@ -1,7 +1,7 @@
 var socket = io();
 
 var snakes = [];
-var colours = ['white', 'yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var colours = ['yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen', 'white'];
 var winningMessage = "";
 
 function setup() {
