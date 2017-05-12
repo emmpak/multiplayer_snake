@@ -1,6 +1,6 @@
 var socket = io();
 
-var squares = [];
+var squares = new Square();
 var colours = ['white', 'red', 'green', 'pink'];
 
 function setup() {
@@ -9,8 +9,8 @@ function setup() {
 
 function draw() {
   background('#34495e');
-  for(var i=0; i<squares.length; i++){
-    squares[i].show(i);
+  for(var i=0; i<squares.players.length; i++){
+    squares.players[i].show(i);
   }
 }
 
@@ -20,34 +20,37 @@ function draw() {
 
 function Square() {
 
-  // this.update = function(x, y) {
-  //   this.x = x;
-  //   this.y = y;
-  // };
+  this.players = players;
+
+  this.update = function(players) {
+    this.players = players;
+  }
 
   this.show = function(id) {
     fill(colours[id]);
+    console.log(this.positions);
     var square = squares.find(function(square) { return square.id === id });
-    for(var i=0; i<square.positions.length; i++) {
+    console.log(square);
+    for(var i=0; i<this.positions.length; i++) {
       rect(square.x, square.y, 20,20);
     }
-    rect(this.x,this.y,20,20);
+    // rect(this.x,this.y,20,20);
   };
 }
 
-socket.on('connect', function(){
-  squares.push(new Square());
-  console.log(squares);
-})
+socket.on('connect', function(players){
+  squares.update(players);
+  console.log(square.players);
+});
 
-// socket.on('update position', function(coordinates){
-//   while(coordinates.length >= squares.length) {
-//     squares.push(new Square());
-//   }
-//   // for(var i=0; i<coordinates.length; i++){
-//   //   updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
-//   // }
-// });
+socket.on('update position', function(players) {
+  // var i = squares.map(function(square) { return square.id }).indexOf(player.id);
+  squares.update(players);
+  console.log(squares)
+  // for(var i=0; i<square.positions.length; i++) {
+  //   rect(square.x, square.y, 20,20);
+  // }
+});
 
 socket.on('disconnect', function(id){
   squares = squares.filter(function(square) {square.id !== id});

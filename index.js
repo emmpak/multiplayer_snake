@@ -16,15 +16,20 @@ app.get('/', function(req, res){
 
 io.on('connect', function(socket){
   console.log('new connection ' + socket.id);
+  var originalPosition = startPoint();
   socket.player = {
     id: http.lastPlayerID++,
-    position: {
-      x: randomInt(100,400),
-      y: randomInt(100,400)
-    },
     key: 0,
-    positions: []
+    positions: [originalPosition]
   };
+
+  function startPoint() {
+    var x = randomInt(100,400);
+    var y = randomInt(100,400);
+    return [x,y];
+  };
+
+  io.emit('new player', getAllPlayers());
 
   if(getAllPlayers().length === 1){
     setInterval(function(){
