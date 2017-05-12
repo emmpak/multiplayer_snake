@@ -29,9 +29,10 @@ io.on('connect', function(socket){
     return [x,y];
   }
 
-  io.emit('new player', getAllPlayers());
+  // io.emit('new player', getAllPlayers());
 
   if(getAllPlayers().length === 1){
+    console.log("hi")
     setInterval(function(){
       io.emit('update position', updatePositions());
     }, 700);

@@ -31,13 +31,16 @@ function Square() {
   };
 }
 
-socket.on('update positions', function(players){
+socket.on('update position', function(players){
   while(players.length >= squares.length) {
     squares.push(new Square());
   }
+  console.log(players);
   for(var i=0; i<players.length; i++){
-    for(var j=0; j<players[i].positions; j++){
-      updatePosition(players[j].id, players[j].positions[0], players[j].positions[1]);
+    for(var j=0; j<players[i].positions.length; j++){
+      console.log(players[i]);
+      console.log(players[i].positions)
+      updatePosition(players[i].id, players[i].positions[j][0], players[i].positions[j][1]);
     }
   }
 });
@@ -46,8 +49,6 @@ socket.on('update single position', function(player){
     if(squares.length === 0) {
       squares.push(new Square());
     }
-    console.log(squares);
-    console.log(player.id);
     updatePosition(player.id, player.positions.slice(-1)[0][0], player.positions.slice(-1)[0][1]);
 });
 
