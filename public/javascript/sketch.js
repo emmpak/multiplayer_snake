@@ -5,10 +5,10 @@ var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'choco
 
 function setup() {
   createCanvas(1000, 1000);
-  background('#34495e');
 }
 
 function draw() {
+  background('#34495e');
   for(var i=0; i<squares.length; i++){
     squares[i].show(i);
   }
