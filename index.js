@@ -14,6 +14,8 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+var playersDead = 0;
+
 io.on('connect', function(socket){
   console.log('new connection ' + socket.id);
   socket.player = {
@@ -50,7 +52,11 @@ io.on('connect', function(socket){
         player.position = square.calculatePosition(player.position,player.key);
       } else {
         player.dead = true;
-        console.log(player.id);
+        playersDead += 1;
+        if(playersDead+1 >= getAllPlayers().length) {
+          io.emit('winner', 'We have a WINNER!');
+        } else {
+        }
       }
     });
     return getAllPlayers();
