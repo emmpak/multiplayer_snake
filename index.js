@@ -15,7 +15,9 @@ app.get('/', function(req, res){
 });
 
 io.on('connect', function(socket){
+
   console.log('new connection ' + socket.id);
+
   var originalPosition = startPoint();
   socket.player = {
     id: http.lastPlayerID++,
@@ -23,20 +25,25 @@ io.on('connect', function(socket){
     positions: [originalPosition]
   };
 
-  function startPoint() {
-    var x = randomInt(100,400);
-    var y = randomInt(100,400);
-    return [x,y];
-  }
-
-  // io.emit('new player', getAllPlayers());
+  io.emit('new player', http.lastPlayerID + 1);
 
   if(getAllPlayers().length === 1){
-    console.log("hi")
     setInterval(function(){
+      console.log(getAllPlayers());
       io.emit('update position', updatePositions());
     }, 700);
   }
+
+  socket.on('keypress', function(key){
+    console.log("Server received keypress: " + key);
+    socket.player.key = key;
+    io.emit('update single position', square.calculatePosition(socket.player));
+  });
+
+  socket.on('disconnect', function() {
+    console.log(socket.player.id);
+    io.emit('disconnect',socket.player.id);
+  });
 
   function getAllPlayers() {
     var players = [];
@@ -57,18 +64,13 @@ io.on('connect', function(socket){
 
   function randomInt (low, high) {
     return Math.floor(Math.random() * (high - low) + low);
-}
+  }
 
-  socket.on('keypress', function(key){
-    console.log("Server received keypress: " + key);
-    socket.player.key = key;
-    io.emit('update single position', square.calculatePosition(socket.player));
-  });
-
-  socket.on('disconnect', function() {
-    console.log(socket.player.id);
-    io.emit('disconnect',socket.player.id);
-  });
+  function startPoint() {
+    var x = randomInt(100,400);
+    var y = randomInt(100,400);
+    return [x,y];
+  }
 });
 
 

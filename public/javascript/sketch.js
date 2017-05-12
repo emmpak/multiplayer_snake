@@ -1,6 +1,6 @@
 var socket = io();
 
-var squares = [];
+var snakes = [];
 var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 
 function setup() {
@@ -9,51 +9,52 @@ function setup() {
 }
 
 function draw() {
-  for(var i=0; i<squares.length; i++){
-    squares[i].show(i);
+  for(var i=0; i<snakes.length; i++){
+    snakes[i].show(i);
+
+    // for(var j=0; j<snakes[i].positions; j++) {
+    //   snakes[i].show(i, j);
+    // }
   }
 }
 
-function updatePosition(i, x, y) {
-  squares[i].update(x,y);
+function updatePosition(i, positions) {
+  snakes[i].update(positions);
 }
 
-function Square() {
+function Snake() {
+  this.positions = []
 
-  this.update = function(x, y) {
-    this.x = x;
-    this.y = y;
+  this.update = function(positions) {
+    this.positions = positions;
   };
 
-  this.show = function(id) {
-    fill(colours[id]);
-    rect(this.x,this.y,20,20);
+  this.show = function(i) {
+    fill(colours[i]);
+    this.positions.forEach(function(position) {rect(position[0],position[1],20,20);})
+    // rect(this.positions[j][0],this.positions[j][1],20,20);
   };
 }
+
+socket.on('new player', function(number) {
+  for(var i = 0; i < number; i++){
+    snakes.push(new Snake());
+  }
+})
 
 socket.on('update position', function(players){
-  while(players.length >= squares.length) {
-    squares.push(new Square());
+  while(players.length > snakes.length) {
+    snakes.push(new Snake());
   }
-  console.log(players);
   for(var i=0; i<players.length; i++){
-    for(var j=0; j<players[i].positions.length; j++){
-      console.log(players[i]);
-      console.log(players[i].positions)
-      updatePosition(players[i].id, players[i].positions[j][0], players[i].positions[j][1]);
-    }
+    updatePosition(players[i].id, players[i].positions);
   }
 });
 
 socket.on('update single position', function(player){
-    if(squares.length === 0) {
-      squares.push(new Square());
-    }
-    updatePosition(player.id, player.positions.slice(-1)[0][0], player.positions.slice(-1)[0][1]);
+    updatePosition(player.id, player.positions);
 });
 
 socket.on('disconnect', function(id){
-  console.log(squares);
-  squares = squares.filter(function(square) {square.id !== id;});
-  console.log(squares);
+  snakes = snakes.filter(function(square) {square.id !== id;});
 });
