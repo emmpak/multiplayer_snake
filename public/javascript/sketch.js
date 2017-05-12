@@ -1,14 +1,14 @@
 var socket = io();
 
 var squares = [];
-var colours = ['white', 'red', 'green', 'yellow'];
+var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 
 function setup() {
   createCanvas(1000, 1000);
+  background('#34495e');
 }
 
 function draw() {
-  background('#34495e');
   for(var i=0; i<squares.length; i++){
     squares[i].show(i);
   }
