@@ -71,6 +71,7 @@ io.on('connect', function(socket){
       player.position.x = randomInt(5,45)*20;
       player.position.y = randomInt(5,45)*20;
       player.key = 0;
+      playersDead = 0;
       io.emit('winner', "");
     })
   }
