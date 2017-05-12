@@ -17,22 +17,38 @@ app.get('/', function(req, res){
 var playersDead = 0;
 
 io.on('connect', function(socket){
+
   console.log('new connection ' + socket.id);
+
+  var originalPosition = startPoint();
   socket.player = {
     id: http.lastPlayerID++,
-    position: {
-      x: randomInt(5,45)*20,
-      y: randomInt(5,45)*20,
-    },
-    key: 0
+    key: 0,
+    positions: [originalPosition]
   };
+
+  io.emit('new player', http.lastPlayerID + 1);
 
   if(getAllPlayers().length === 1){
     setInterval(function(){
       io.emit('update position', updatePositions());
-      console.log(getAllPlayers());
     }, 100);
   }
+
+  socket.on('keypress', function(key){
+    console.log("Server received keypress: " + key);
+    socket.player.key = key;
+    if(socket.player.dead !== true) {
+      io.emit('update single position', square.calculatePosition(socket.player));
+    } else {
+      console.log(socket.player.id + " is dead!");
+    }
+  });
+
+  socket.on('disconnect', function() {
+    console.log(socket.player.id);
+    io.emit('disconnect',socket.player.id);
+  });
 
   function getAllPlayers() {
     var players = [];
@@ -45,11 +61,13 @@ io.on('connect', function(socket){
 
   function updatePositions() {
     getAllPlayers().forEach(function(player){
+      console.log(player.positions);
+
       if(player.dead) {
         console.log(player.id + " is dead!")
       }
-      else if(checkBoundary(player.position) != true) {
-        player.position = square.calculatePosition(player.position,player.key);
+      else if(checkBoundary(player.positions.slice(-1)[0]) != true) {
+        square.calculatePosition(player);
       } else {
         player.dead = true;
         playersDead += 1;
@@ -74,42 +92,33 @@ io.on('connect', function(socket){
     return getAllPlayers();
   }
 
+
   function resetAllPlayers() {
     getAllPlayers().forEach(function(player){
       player.dead = false;
-      player.position.x = randomInt(5,45)*20;
-      player.position.y = randomInt(5,45)*20;
+      var originalPosition = startPoint();
+      player.positions = [originalPosition];
       player.key = 0;
       playersDead = 0;
       io.emit('winner', "");
     })
   }
 
-
   function checkBoundary(pos) {
-    if(pos.x < 0 || pos.y < 0 || pos.x > 980 || pos.y > 980) {
+    if(pos[0] < 0 || pos[1] < 0 || pos[0] > 980 || pos[1] > 980) {
       return true;
     }
   }
 
-  function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
+  function randomInt (low, high, multiple) {
+    return Math.floor(Math.random() * (high - low) + low) * multiple;
   }
 
-  socket.on('keypress', function(key){
-    console.log("Server received keypress: " + key);
-    socket.player.key = key;
-    if(socket.player.dead !== true) {
-      io.emit('update position', square.calculatePosition(socket.player.position, key));
-    } else {
-      console.log(socket.player.id + " is dead!");
-    }
-  });
-
-  socket.on('disconnect', function() {
-    console.log(socket.player.id);
-    io.emit('disconnect',socket.player.id);
-  });
+  function startPoint() {
+    var x = randomInt(5,45,20);
+    var y = randomInt(5,45,20);
+    return [x,y];
+  }
 });
 
 

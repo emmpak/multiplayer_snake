@@ -1,20 +1,25 @@
 module.exports = {
-  calculatePosition: function(position, key) {
-    switch(key) {
+  calculatePosition: function(player) {
+    var lastElement = JSON.parse(JSON.stringify(player.positions.slice(-1)[0]));
+    switch(player.key) {
     case 40:
-      position.y += 20;
-      return position;
+      lastElement[1] += 20;
+      player.positions.push(lastElement);
+      return player;
     case 37:
-      position.x -= 20;
-      return position;
+      lastElement[0] -= 20;
+      player.positions.push(lastElement);
+      return player;
     case 39:
-      position.x += 20;
-      return position;
+      lastElement[0] += 20;
+      player.positions.push(lastElement);
+      return player;
     case 38:
-      position.y -= 20;
-      return position;
+      lastElement[1] -= 20;
+      player.positions.push(lastElement);
+      return player;
     default:
-      return position;
+      return player;
     }
   }
-}
+};

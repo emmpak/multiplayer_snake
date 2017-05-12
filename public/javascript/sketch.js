@@ -1,6 +1,6 @@
 var socket = io();
 
-var squares = [];
+var snakes = [];
 var colours = ['white', 'yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 var winningMessage = "";
 
@@ -10,38 +10,48 @@ function setup() {
 
 function draw() {
   background('#34495e');
-  for(var i=0; i<squares.length; i++){
-    squares[i].show(i);
+  for(var i=0; i<snakes.length; i++){
+    snakes[i].show(i);
   }
   fill(255);
   textSize(50);
   text(winningMessage, 275, 500);
 }
 
-function updatePosition(i, x, y) {
-  squares[i].update(x,y);
+function updatePosition(i, positions) {
+  snakes[i].update(positions);
 }
 
-function Square() {
+function Snake() {
+  this.positions = []
 
-  this.update = function(x, y) {
-    this.x = x;
-    this.y = y;
+  this.update = function(positions) {
+    this.positions = positions;
   };
 
-  this.show = function(id) {
-    fill(colours[id]);
-    rect(this.x,this.y,20,20);
+  this.show = function(i) {
+    fill(colours[i]);
+    this.positions.forEach(function(position) {rect(position[0],position[1],20,20);})
   };
 }
 
-socket.on('update position', function(coordinates){
-  while(coordinates.length >= squares.length) {
-    squares.push(new Square());
+socket.on('new player', function(number) {
+  for(var i = 0; i < number; i++){
+    snakes.push(new Snake());
   }
-  for(var i=0; i<coordinates.length; i++){
-    updatePosition(coordinates[i].id, coordinates[i].position.x, coordinates[i].position.y);
+})
+
+socket.on('update position', function(players){
+  while(players.length > snakes.length) {
+    snakes.push(new Snake());
   }
+  for(var i=0; i<players.length; i++){
+    updatePosition(players[i].id, players[i].positions);
+  }
+});
+
+socket.on('update single position', function(player){
+    updatePosition(player.id, player.positions);
 });
 
 socket.on('winner', function(message){
@@ -49,7 +59,5 @@ socket.on('winner', function(message){
 });
 
 socket.on('disconnect', function(id){
-  console.log(squares);
-  squares = squares.filter(function(square) {square.id !== id});
-  console.log(squares);
+  snakes = snakes.filter(function(square) {square.id !== id;});
 });
