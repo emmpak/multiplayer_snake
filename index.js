@@ -55,12 +55,26 @@ io.on('connect', function(socket){
         playersDead += 1;
         if(playersDead+1 >= getAllPlayers().length) {
           io.emit('winner', 'We have a WINNER!');
+          setTimeout(function() {
+            resetAllPlayers();
+          }, 3000);
         } else {
         }
       }
     });
     return getAllPlayers();
   }
+
+  function resetAllPlayers() {
+    getAllPlayers().forEach(function(player){
+      player.dead = false;
+      player.position.x = randomInt(5,45)*20;
+      player.position.y = randomInt(5,45)*20;
+      player.key = 0;
+      io.emit('winner', "");
+    })
+  }
+
 
   function checkBoundary(pos) {
     if(pos.x < 0 || pos.y < 0 || pos.x > 980 || pos.y > 980) {
