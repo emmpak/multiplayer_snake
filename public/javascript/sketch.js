@@ -1,57 +1,58 @@
 var socket = io();
 
-var squares = new Square();
-var colours = ['white', 'red', 'green', 'pink'];
+var squares = [];
+var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 
 function setup() {
   createCanvas(1000, 1000);
+  background('#34495e');
 }
 
 function draw() {
-  background('#34495e');
-  for(var i=0; i<squares.players.length; i++){
-    squares.players[i].show(i);
+  for(var i=0; i<squares.length; i++){
+    squares[i].show(i);
   }
 }
 
-// function updatePosition(i, x, y) {
-//   squares[i].update(x,y);
-// }
+function updatePosition(i, x, y) {
+  squares[i].update(x,y);
+}
 
 function Square() {
 
-  this.players = players;
-
-  this.update = function(players) {
-    this.players = players;
-  }
+  this.update = function(x, y) {
+    this.x = x;
+    this.y = y;
+  };
 
   this.show = function(id) {
     fill(colours[id]);
-    console.log(this.positions);
-    var square = squares.find(function(square) { return square.id === id });
-    console.log(square);
-    for(var i=0; i<this.positions.length; i++) {
-      rect(square.x, square.y, 20,20);
-    }
-    // rect(this.x,this.y,20,20);
+    rect(this.x,this.y,20,20);
   };
 }
 
-socket.on('connect', function(players){
-  squares.update(players);
-  console.log(square.players);
+socket.on('update positions', function(players){
+  while(players.length >= squares.length) {
+    squares.push(new Square());
+  }
+  for(var i=0; i<players.length; i++){
+    for(var j=0; j<players[i].positions; j++){
+      updatePosition(players[j].id, players[j].positions[0], players[j].positions[1]);
+    }
+  }
 });
 
-socket.on('update position', function(players) {
-  // var i = squares.map(function(square) { return square.id }).indexOf(player.id);
-  squares.update(players);
-  console.log(squares)
-  // for(var i=0; i<square.positions.length; i++) {
-  //   rect(square.x, square.y, 20,20);
-  // }
+socket.on('update single position', function(player){
+    if(squares.length === 0) {
+      squares.push(new Square());
+    }
+    console.log(squares);
+    console.log(player.id);
+    updatePosition(player.id, player.positions.slice(-1)[0][0], player.positions.slice(-1)[0][1]);
 });
 
 socket.on('disconnect', function(id){
-  squares = squares.filter(function(square) {square.id !== id});
+  console.log(squares);
+  squares = squares.filter(function(square) {square.id !== id;});
+  console.log(squares);
 });

@@ -27,14 +27,13 @@ io.on('connect', function(socket){
     var x = randomInt(100,400);
     var y = randomInt(100,400);
     return [x,y];
-  };
+  }
 
   io.emit('new player', getAllPlayers());
 
   if(getAllPlayers().length === 1){
     setInterval(function(){
       io.emit('update position', updatePositions());
-      console.log(getAllPlayers());
     }, 700);
   }
 
@@ -59,12 +58,10 @@ io.on('connect', function(socket){
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-
-
   socket.on('keypress', function(key){
     console.log("Server received keypress: " + key);
     socket.player.key = key;
-    io.emit('update position', square.calculatePosition(socket.player));
+    io.emit('update single position', square.calculatePosition(socket.player));
   });
 
   socket.on('disconnect', function() {
