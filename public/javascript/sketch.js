@@ -1,7 +1,7 @@
 var socket = io();
 
 var squares = [];
-var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
+var colours = ['white', 'yellow', 'chocolate', 'crimson', 'red', 'green', 'blueViolet', 'bisque', 'darkGoldenRod', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 var winningMessage = "";
 
 function setup() {
@@ -15,7 +15,7 @@ function draw() {
   }
   fill(255);
   textSize(50);
-  text(winningMessage, 280, 500);
+  text(winningMessage, 275, 500);
 }
 
 function updatePosition(i, x, y) {
