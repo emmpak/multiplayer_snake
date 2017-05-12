@@ -1,7 +1,7 @@
 var socket = io();
 
 var squares = [];
-var colours = ['white', 'red', 'green', 'pink'];
+var colours = ['white', 'red', 'green', 'yellow', 'blueViolet', 'bisque', 'chocolate', 'darkGoldenRod', 'crimson', 'gray', 'orange', 'deepPink', 'lawnGreen'];
 
 function setup() {
   createCanvas(1000, 1000);
