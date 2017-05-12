@@ -56,8 +56,27 @@ io.on('connect', function(socket){
         if(playersDead+1 >= getAllPlayers().length) {
           io.emit('winner', 'We have a WINNER!');
           setTimeout(function() {
-            resetAllPlayers();
+            io.emit('winner', 'New game starts in: 3');
+            setTimeout(function() {
+              io.emit('winner', 'New game starts in: 2');
+              setTimeout(function() {
+                io.emit('winner', 'New game starts in: 1');
+                setTimeout(function() {
+                  resetAllPlayers();
+                }, 1000);
+              }, 1000);
+            }, 1000);
           }, 3000);
+          // setTimeout(function() {
+          //   io.emit('winner', 'New game starts in: 3');
+          // }, 1000);
+          // setTimeout(function() {
+          //   io.emit('winner', 'New game starts in: 2');
+          // }, 1000);
+          // setTimeout(function() {
+          //   io.emit('winner', 'New game starts in: 1');
+          // }, 1000);
+          //resetAllPlayers();
         } else {
         }
       }
