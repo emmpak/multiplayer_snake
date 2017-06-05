@@ -1,7 +1,5 @@
 # Multiplayer-snake
 
-[![Stories in Ready]([![Stories in Ready](https://badge.waffle.io/petewilkins/multiplayer-snake.svg?label=ready&title=Ready)](http://waffle.io/petewilkins/multiplayer-snake)
-
 ## Collaborators
 * [Emil Iliev](https://github.com/emmpak)
 * [Pete Wilkins](https://github.com/petewilkins)
@@ -25,7 +23,7 @@
 
 ## Technologies Integrated
 * JavaScript - This application was written completely in JavaScript.
-* NodeJS - An event-driven I/O server-side JavaScript environment that is ideal for real-time web applications such as ours.
+* [NodeJS](https://nodejs.org/en/) - An event-driven I/O server-side JavaScript environment that is ideal for real-time web applications such as ours.
 * [Express](https://github.com/expressjs) - Quick and minimilist framework for node. Selected for its robust routing and speed.
 * [Sockets](http://socket.io) -
 * [P5](https://p5js.org/get-started/) - JavaScript library that provides pre-defined methods for the construction of shapes. This enabled the canvas and blocks of the 'snake' to be drawn more efficiently.
